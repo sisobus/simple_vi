@@ -27,11 +27,13 @@ int main(int argc,char *argv[]) {
             if ( lines[i][j] == '\0' ) lines[i][j] = ' ';
 
 
+    int dhistory = 0;
     while ( true ) {
         draw(filename,&cursor,mode,command,result);
         char c = getch();
         if ( mode == COMMAND ) {
             if ( c == ESC ) {
+                dhistory = 0;
                 continue;
             } else if ( c == ':' ) {
                 mode = COMMAND_COLON;
@@ -68,6 +70,13 @@ int main(int argc,char *argv[]) {
                 cursor.x = getIndexAtLastValue(lines[cursor.y]);
             } else if ( c == 'w' ) {
                 cursor = getCursorAtNextValue(lines,cursor);
+            } else if ( c == 'd' ) { 
+                if ( dhistory == 1 ) {
+                    dhistory = 0;
+                    moveUpAtYIndex(lines,cursor.y);
+                } else {
+                    dhistory = 1;
+                }
             } else {
                 cursor = getCursorAtPrevValue(lines,cursor);
             }
